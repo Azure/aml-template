@@ -1,3 +1,5 @@
 {
-    "": ""
+    "name": "same-demo-wus2",
+    "resourceGroup": "gha_and_aml_rg",
+    "createWorkspace": false
 }
