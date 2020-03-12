@@ -16,7 +16,7 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - name: Check Out Repository
-      id: checkout
+      id: checkout_repository
       uses: actions/checkout@v2
     
     # Login to Azure, so that the next action can connect to the Azure Machine Learning workspace. 
