@@ -1,6 +1,6 @@
 {
     "experiment": "GitHubActionExperiment",
-    "source_directory": "src/train/",
+    "source_directory": "src/train",
     "script_name": "run_config",
     "function_name": "main"
 }
