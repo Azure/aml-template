@@ -66,7 +66,7 @@ def log_confusion_matrix(cm, labels):
     log_confusion_matrix_image(cm, labels, normalize=True, log_name='confusion_matrix_normalized', title='Normalized confusion matrix')
 
 
-def run(args):
+def main(args):
     # create the outputs folder
     os.makedirs('outputs', exist_ok=True)
     
@@ -116,7 +116,7 @@ def run(args):
     run.log('Model Name', np.str(args.modelname))
 
 
-def init():
+def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--kernel', type=str, default='rbf', help='Kernel type to be used in the algorithm')
     parser.add_argument('--penalty', type=float, default=1.0, help='Penalty parameter of the error term')
@@ -126,5 +126,5 @@ def init():
 
 
 if __name__ == '__main__':
-    args = init()
-    run(args=args)
+    args = parse_args()
+    main(args=args)
