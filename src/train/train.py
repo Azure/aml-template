@@ -108,7 +108,8 @@ def main(args):
     
     # create a confusion matrix
     labels = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
-    cm = confusion_matrix(y_test, svm_predictions, labels)
+    labels_numbers = [0, 1, 2]
+    cm = confusion_matrix(y_test, svm_predictions, labels_numbers)
     log_confusion_matrix(cm, labels)
     
     # files saved in the "outputs" folder are automatically uploaded into run history
