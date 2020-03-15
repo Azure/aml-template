@@ -20,7 +20,7 @@ def main(workspace):
     # Create experiment config
     print("Creating experiment config")
     estimator = Estimator(
-        source_directory=".", 
+        source_directory="src/train",
         entry_script="train.py",
         script_params=script_params,
         compute_target=compute_target,
