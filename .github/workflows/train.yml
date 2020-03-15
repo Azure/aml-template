@@ -33,11 +33,6 @@ jobs:
       with:
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # Check files
-    - name: Check files
-      run: |
-        find | sed 's|[^/]*/|- |g'
-    
     # Submit a training run to the Azure Machine Learning
     - name: Submit training run
       id: aml_training
