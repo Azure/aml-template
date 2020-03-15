@@ -16,15 +16,8 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - name: Check Out Repository
-      id: checkout
+      id: checkout_repository
       uses: actions/checkout@v2
-    
-    # Login to Azure, so that the next action can connect to the Azure Machine Learning workspace. 
-    #- name: Azure Login
-    #  id: azure_login
-    #  uses: azure/login@v1
-    #  with:
-    #    creds: ${{ secrets.AZURE_CREDENTIALS }}
         
     # Connect or Create the Azure Machine Learning Workspace
     - name: Connect/Create Azure Machine Learning Workspace
@@ -33,11 +26,6 @@ jobs:
       with:
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # Check whether the Action created a config file
-    #- name: Check if config file was created
-    #  run: |
-    #    find | sed 's|[^/]*/|- |g'
-    
     # Connect or Create a Compute Target in Azure Machine Learning
     - name: Connect/Create Azure Machine Learning Compute Target
       id: aml_compute_training
@@ -45,7 +33,21 @@ jobs:
       with:
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # # Submit a training run to the Azure Machine Learning
-    # - name: Submit training run
-    #   id: aml_training
-    #   uses: marvinbuss/AMLTrain@master
+    # Submit a training run to the Azure Machine Learning
+    - name: Submit training run
+      id: aml_training
+      uses: Azure/aml-train@master
+      with:
+          azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      # Login to Azure, so that the next action can connect to the Azure Machine Learning workspace. 
+    #- name: Azure Login
+    #  id: azure_login
+    #  uses: azure/login@v1
+    #  with:
+    #    creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+    # Check whether the Action created a config file
+    #- name: Check if config file was created
+    #  run: |
+    #    find | sed 's|[^/]*/|- |g'
