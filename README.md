@@ -1,9 +1,7 @@
 ---
-page_type: sample
+page_type: readme
 languages:
-- csharp
-products:
-- dotnet
+- python
 description: "Add 150 character max description"
 urlFragment: "update-this-to-unique-url-stub"
 ---
