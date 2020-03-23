@@ -1,0 +1,44 @@
+name: Action to deploy your model to an AML endpoint
+
+on: [push, pull_request]
+
+jobs:
+  # This workflow contains an option profiling job, a test job and a prod/dev deployment job
+  train:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Check Out Repository
+      id: checkout_repository
+      uses: actions/checkout@v2
+
+    # # Profile your model (this is optional)
+    # - name: Profile Model
+    #   id: aml_profile
+    #   uses: Azure/aml-profile@master
+    #   with:
+    #       azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+
+    # Test your model (this is optional)
+    - name: Test Model
+      id: aml_test
+      uses: Azure/aml-deploy@master
+      with:
+          azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+
+    # Deploy your model to dev (this is optional)
+    - name: Dev Deploy
+      id: aml_dev_deploy
+      uses: Azure/aml-deploy@master
+      with:
+          azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+
+    # Deploy your model to production
+    - name: Prod Deploy
+      id: aml_prod_deploy
+      uses: Azure/aml-deploy@master
+      with:
+          azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
