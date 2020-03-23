@@ -9,27 +9,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: listen for PR Comments
-        uses: machine-learning-apps/actions-chatops@master
+      - name: Slash Command Dispatch
+        uses: peter-evans/slash-command-dispatch@v1
         with:
-          TRIGGER_PHRASE: "/deploy"
-        env: # you must supply GITHUB_TOKEN
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: prcomm
-        # This step clones the branch of the PR associated with the triggering phrase, but only if it is triggered.
-      - name: clone branch of PR
-        if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
-        uses: actions/checkout@master
-        with:
-          ref: ${{ steps.prcomm.outputs.SHA }}
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          commands: deploy
+          permission: admin
+          issue-type: pull-request
+          named-args: true
 
-      # Connect or Create the Azure Machine Learning Workspace
-      - name: Connect/Create Azure Machine Learning Workspace
-        if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
-        id: aml_workspace
-        uses: Azure/aml-workspace@master
-        with:
-            azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Output command and named arguments
+        run: |
+          echo ${{ github.event.client_payload.slash_command.command }}
+          echo ${{ github.event.client_payload.slash_command.profile }}
+          echo ${{ github.event.client_payload.slash_command.test }}
+          echo ${{ github.event.client_payload.slash_command.dev }}
+          echo ${{ github.event.client_payload.slash_command.prod }}
+
+      # # Connect or Create the Azure Machine Learning Workspace
+      # - name: Connect/Create Azure Machine Learning Workspace
+      #   if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
+      #   id: aml_workspace
+      #   uses: Azure/aml-workspace@master
+      #   with:
+      #       azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
 
       # # Profile your model (this is optional)
       # - name: Profile Model
@@ -39,13 +42,13 @@ jobs:
       #   with:
       #       azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Test your model (this is optional)
-      - name: Test Model
-        if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
-        id: aml_test
-        uses: Azure/aml-deploy@master
-        with:
-            azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+      # # Test your model (this is optional)
+      # - name: Test Model
+      #   if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
+      #   id: aml_test
+      #   uses: Azure/aml-deploy@master
+      #   with:
+      #       azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
 
       # Deploy your model to dev (this is optional)
       # - name: Dev Deploy
