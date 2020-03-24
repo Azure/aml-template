@@ -1,4 +1,4 @@
-name: Action to deploy your model to an AML endpoint
+name: aml-deploy
 
 on: [issue_comment]
 
@@ -12,7 +12,7 @@ jobs:
       - name: Slash Command Dispatch
         uses: peter-evans/slash-command-dispatch@v1
         with:
-          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           commands: deploy
           permission: admin
           issue-type: pull-request
