@@ -1,6 +1,8 @@
 name: aml-deploy
 
-on: [issue_comment]
+on:
+  issue_comment:
+    types: [created]
 
 jobs:
   # This workflow contains an option profiling job, a test job and a prod/dev deployment job
