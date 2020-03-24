@@ -11,6 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Slash Command Dispatch
+        id: slash_command
         uses: peter-evans/slash-command-dispatch@v1
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
