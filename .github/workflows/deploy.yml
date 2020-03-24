@@ -7,13 +7,9 @@ on:
 jobs:
   # This workflow contains an option profiling job, a test job and a prod/dev deployment job
   deploy:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
     steps:
-
       - uses: actions/checkout@v2
-
       - name: Slash Command Dispatch
         uses: peter-evans/slash-command-dispatch@v1
         with:
@@ -21,10 +17,9 @@ jobs:
           reaction-token: ${{ secrets.GITHUB_TOKEN }}
           commands: deploy
           reaction-type: hooray
-          # permission: write
-          # issue-type: pull-request
-          # named-args: true
-          # 
+          permission: write
+          issue-type: pull-request
+          named-args: true
 
       - name: Output command and named arguments
         run: |
