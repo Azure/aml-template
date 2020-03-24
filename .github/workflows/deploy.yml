@@ -24,11 +24,7 @@ jobs:
 
       - name: Output command and named arguments
         run: |
-          echo ${{ github.event.client_payload.slash_command.command }}
-          echo ${{ github.event.client_payload.slash_command.profile }}
-          echo ${{ github.event.client_payload.slash_command.test }}
-          echo ${{ github.event.client_payload.slash_command.dev }}
-          echo ${{ github.event.client_payload.slash_command.prod }}
+          echo ${{ github.event }}
 
       # # Connect or Create the Azure Machine Learning Workspace
       # - name: Connect/Create Azure Machine Learning Workspace
