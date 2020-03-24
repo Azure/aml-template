@@ -1,8 +1,5 @@
-# Conda environment specification. The dependencies defined in this file will
-# be automatically provisioned for runs with userManagedDependencies=False.
-# Details about the Conda environment file format:
+# Conda environment specification. Details about the Conda environment file format:
 # https://conda.io/docs/user-guide/tasks/manage-environments.html#create-env-file-manually
-# NOTE: the packages commented are used for local development, and not needed for deployment
 
 name: deployment_env
 dependencies:
