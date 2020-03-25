@@ -26,7 +26,7 @@ jobs:
       # parse out keyword args
       - name: keyword args
         if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
-        run: echo ${{ steps.prcomm.outputs }}
+        run: echo ${{ toJson(steps.prcomm.outputs) }}
 
       # Connect or Create the Azure Machine Learning Workspace
       - name: Connect/Create Azure Machine Learning Workspace
