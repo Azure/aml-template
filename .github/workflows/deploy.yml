@@ -13,13 +13,12 @@ jobs:
           PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload) }}
         run: echo "$PAYLOAD_CONTEXT"
 
-      # # Connect or Create the Azure Machine Learning Workspace
-      # - name: Connect/Create Azure Machine Learning Workspace
-      #   if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
-      #   id: aml_workspace
-      #   uses: Azure/aml-workspace@master
-      #   with:
-      #       azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+      # Connect or Create the Azure Machine Learning Workspace
+      - name: Connect/Create Azure Machine Learning Workspace
+        id: aml_workspace
+        uses: Azure/aml-workspace@master
+        with:
+            azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
 
       # # Profile your model (this is optional)
       # - name: Profile Model
