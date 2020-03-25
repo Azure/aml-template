@@ -5,7 +5,7 @@ on:
     types: [created]
 
 jobs:
-  # This workflow contains an option profiling job, a test job and a prod/dev deployment job
+  # This is the dispatch for slash commands in the repo
   slash_command:
     runs-on: ubuntu-latest
     steps:
