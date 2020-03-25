@@ -1,43 +1,25 @@
 name: aml-deploy
 
 on:
-  issue_comment:
-    types: [created]
+  repository_dispatch:
+    types: [deploy-command]
 
 jobs:
-  # This workflow contains an option profiling job, a test job and a prod/dev deployment job
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: listen for PR Comments
-        uses: machine-learning-apps/actions-chatops@master
-        with:
-          TRIGGER_PHRASE: "/deploy"
-        env: # you must supply GITHUB_TOKEN
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: prcomm
-        # This step clones the branch of the PR associated with the triggering phrase, but only if it is triggered.
-      - name: clone branch of PR
-        if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ steps.prcomm.outputs.SHA }}
+      - name: Dump the client payload context
+        env:
+          PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload) }}
+        run: echo "$PAYLOAD_CONTEXT"
 
-      # TODO
-      # parse out keyword args
-      # - name: keyword args
-      #   uses: awmatheson/parse-args
+      # # Connect or Create the Azure Machine Learning Workspace
+      # - name: Connect/Create Azure Machine Learning Workspace
       #   if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
-      #   with: 
-      #     string: ${{ steps.prcomm.outputs.TRAILING_LINE }}
-
-      # Connect or Create the Azure Machine Learning Workspace
-      - name: Connect/Create Azure Machine Learning Workspace
-        if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
-        id: aml_workspace
-        uses: Azure/aml-workspace@master
-        with:
-            azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+      #   id: aml_workspace
+      #   uses: Azure/aml-workspace@master
+      #   with:
+      #       azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
 
       # # Profile your model (this is optional)
       # - name: Profile Model
