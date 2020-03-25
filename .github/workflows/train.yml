@@ -48,12 +48,4 @@ jobs:
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
           runId:  ${{ steps.aml_run.outputs.run_id }}
           experimentName: ${{ steps.aml_run.outputs.experiment_name }}
-    
-    # Deploy model in Azure Machine Learning to ACI
-    - name: Deploy model to ACI
-      id: aml_deploy
-      uses: Azure/aml-deploy@master
-      with:
-          azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
-          modelName:  ${{ steps.aml_registermodel.outputs.model_name }}
-          modelVersion: ${{ steps.aml_registermodel.outputs.model_version }}
+

@@ -8,38 +8,42 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Dump the client payload context
+      - name: Check variables
         env:
-          PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload) }}
-        run: echo "$PAYLOAD_CONTEXT"
+          PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload.slash_command) }}
+        run: |
+          if [ -z "${{ github.event.client_payload.slash_command.model_name" ]; then echo "model_name is NULL"; exit 1; else echo "model_name is ${{ toJson(github.event.client_payload.slash_command.model_name) }}"; fi;
+          if [ -z "${{ github.event.client_payload.slash_command.model_version" ]; then echo "model_version is NULL"; else echo "model_version is ${{ toJson(github.event.client_payload.slash_command.model_version) }}"; fi;
 
-      # # Connect or Create the Azure Machine Learning Workspace
-      # - name: Connect/Create Azure Machine Learning Workspace
-      #   if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
-      #   id: aml_workspace
-      #   uses: Azure/aml-workspace@master
-      #   with:
-      #       azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+      # Connect or Create the Azure Machine Learning Workspace
+      - name: Connect/Create Azure Machine Learning Workspace
+        id: aml_workspace
+        uses: Azure/aml-workspace@master
+        with:
+            azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
 
       # # Profile your model (this is optional)
       # - name: Profile Model
-      #   if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
+      #   if: github.event.client_payload.slash_command.profile == 'true'
       #   id: aml_profile
       #   uses: Azure/aml-profile@master
       #   with:
       #       azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # # Test your model (this is optional)
-      # - name: Test Model
-      #   if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
-      #   id: aml_test
-      #   uses: Azure/aml-deploy@master
-      #   with:
-      #       azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+      # Test your model (this is optional)
+      - name: Test Model
+        if: github.event.client_payload.slash_command.test == 'true'
+        id: aml_test
+        uses: Azure/aml-deploy@master
+        with:
+            azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+            modelName:  ${{ github.event.client_payload.slash_command.model_name }}
+            modelVersion: ${{ github.event.client_payload.slash_command.model_version }}
 
-      # Deploy your model to dev (this is optional)
+      # TODO - when tested, uncomment these
+      # # Deploy your model to dev (this is optional)
       # - name: Dev Deploy
-      #   if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
+      #   if: github.event.client_payload.slash_command.dev == 'true'
       #   id: aml_dev_deploy
       #   uses: Azure/aml-deploy@master
       #   with:
@@ -47,7 +51,7 @@ jobs:
 
       # # Deploy your model to production
       # - name: Prod Deploy
-      #   if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
+      #   if: github.event.client_payload.slash_command.prod == 'true'
       #   id: aml_prod_deploy
       #   uses: Azure/aml-deploy@master
       #   with:
