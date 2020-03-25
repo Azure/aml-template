@@ -23,10 +23,13 @@ jobs:
         with:
           ref: ${{ steps.prcomm.outputs.SHA }}
 
+      # TODO
       # parse out keyword args
-      - name: keyword args
-        if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
-        run: echo ${{ toJson(steps.prcomm.outputs) }}
+      # - name: keyword args
+      #   uses: awmatheson/parse-args
+      #   if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
+      #   with: 
+      #     string: ${{ steps.prcomm.outputs.TRAILING_LINE }}
 
       # Connect or Create the Azure Machine Learning Workspace
       - name: Connect/Create Azure Machine Learning Workspace
@@ -45,12 +48,12 @@ jobs:
       #       azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
 
       # # Test your model (this is optional)
-      - name: Test Model
-        if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
-        id: aml_test
-        uses: Azure/aml-deploy@master
-        with:
-            azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+      # - name: Test Model
+      #   if: steps.prcomm.outputs.BOOL_TRIGGERED == 'true'
+      #   id: aml_test
+      #   uses: Azure/aml-deploy@master
+      #   with:
+      #       azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
 
       # Deploy your model to dev (this is optional)
       # - name: Dev Deploy
