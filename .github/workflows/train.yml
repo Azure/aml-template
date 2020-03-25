@@ -24,36 +24,36 @@ jobs:
       id: aml_workspace
       uses: Azure/aml-workspace@master
       with:
-          azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
     
     # Connect or Create a Compute Target in Azure Machine Learning
     - name: Connect/Create Azure Machine Learning Compute Target
       id: aml_compute_training
       uses: Azure/aml-compute@master
       with:
-          azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
     
     # Submit a training run to the Azure Machine Learning
     - name: Submit training run
       id: aml_run
       uses: Azure/aml-run@master
       with:
-          azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
     
     # Register model in Azure Machine Learning model registry
     - name: Register model
       id: aml_registermodel
       uses: Azure/aml-registermodel@master
       with:
-          azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
-          runId:  ${{ steps.aml_run.outputs.runId }}
-          experimentName: ${{ steps.aml_run.outputs.experimentName }}
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          run_id:  ${{ steps.aml_run.outputs.run_id }}
+          experiment_name: ${{ steps.aml_run.outputs.experiment_name }}
     
     # Deploy model in Azure Machine Learning to ACI
     - name: Deploy model to ACI
       id: aml_deploy
       uses: Azure/aml-deploy@master
       with:
-          azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
-          modelName:  ${{ steps.aml_registermodel.outputs.modelName }}
-          modelVersion: ${{ steps.aml_registermodel.outputs.modelVersion }}
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          model_name:  ${{ steps.aml_registermodel.outputs.model_name }}
+          model_version: ${{ steps.aml_registermodel.outputs.model_version }}
