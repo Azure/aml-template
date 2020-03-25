@@ -40,7 +40,8 @@ jobs:
             modelName:  ${{ github.event.client_payload.slash_command.model_name }}
             modelVersion: ${{ github.event.client_payload.slash_command.model_version }}
 
-      # Deploy your model to dev (this is optional)
+      # TODO - when tested, uncomment these
+      # # Deploy your model to dev (this is optional)
       # - name: Dev Deploy
       #   if: github.event.client_payload.slash_command.dev == 'true'
       #   id: aml_dev_deploy

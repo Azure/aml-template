@@ -48,3 +48,4 @@ jobs:
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
           runId:  ${{ steps.aml_run.outputs.run_id }}
           experimentName: ${{ steps.aml_run.outputs.experiment_name }}
+
