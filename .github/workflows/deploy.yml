@@ -20,7 +20,7 @@ jobs:
         id: aml_workspace
         uses: Azure/aml-workspace@master
         with:
-            azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+            azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
       # # Profile your model (this is optional)
       # - name: Profile Model
@@ -36,9 +36,9 @@ jobs:
         id: aml_test
         uses: Azure/aml-deploy@master
         with:
-            azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
-            modelName:  ${{ github.event.client_payload.slash_command.model_name }}
-            modelVersion: ${{ github.event.client_payload.slash_command.model_version }}
+            azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+            model_name:  ${{ github.event.client_payload.slash_command.model_name }}
+            model_version: ${{ github.event.client_payload.slash_command.model_version }}
 
       # TODO - when tested, uncomment these
       # Deploy your model to dev (this is optional)
@@ -47,9 +47,9 @@ jobs:
         id: aml_dev_deploy
         uses: Azure/aml-deploy@master
         with:
-            azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
-            modelName:  ${{ github.event.client_payload.slash_command.model_name }}
-            modelVersion: ${{ github.event.client_payload.slash_command.model_version }}
+            azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+            model_name:  ${{ github.event.client_payload.slash_command.model_name }}
+            model_version: ${{ github.event.client_payload.slash_command.model_version }}
             parameters_file: "dev_aks.json"
 
       # Deploy your model to production
@@ -58,7 +58,7 @@ jobs:
         id: aml_prod_deploy
         uses: Azure/aml-deploy@master
         with:
-            azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
-            modelName:  ${{ github.event.client_payload.slash_command.model_name }}
-            modelVersion: ${{ github.event.client_payload.slash_command.model_version }}
+            azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+            model_name:  ${{ github.event.client_payload.slash_command.model_name }}
+            model_version: ${{ github.event.client_payload.slash_command.model_version }}
             parameters_file: "prod_aks.json"
