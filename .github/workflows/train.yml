@@ -1,4 +1,4 @@
-# This is a basic workflow to help you get started with Actions
+# Actions train a model on Azure Machine Learning
 name: aml-train
 
 # Controls when the action will run. Triggers the workflow on push or pull request 
@@ -39,6 +39,15 @@ jobs:
       uses: Azure/aml-run@master
       with:
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: comment PR
+      uses: unsplash/comment-on-pr@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        msg: "${{ steps.aml_run.outputs.run_metrics }} \n
+        ${{ steps.aml_run.outputs.experiment_name }} \n
+        ${{ steps.aml_run.outputs.run_url }}"
     
     # Register model in Azure Machine Learning model registry
     - name: Register model
@@ -48,12 +57,18 @@ jobs:
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
           run_id:  ${{ steps.aml_run.outputs.run_id }}
           experiment_name: ${{ steps.aml_run.outputs.experiment_name }}
-    
-    # Deploy model in Azure Machine Learning to ACI
-    - name: Deploy model to ACI
-      id: aml_deploy
-      uses: Azure/aml-deploy@master
+
+    - name: comment PR
+      uses: unsplash/comment-on-pr@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-          model_name:  ${{ steps.aml_registermodel.outputs.model_name }}
-          model_version: ${{ steps.aml_registermodel.outputs.model_version }}
+        msg: "${{ steps.aml_registermodel.outputs.model_name }} \n
+        ${{ steps.aml_registermodel.outputs.model_version }} \n
+        ${{ steps.aml_registermodel.outputs.model_id }}"
+
+    # - uses: actions/upload-artifact@v1
+    #   with:
+    #     name: ${{ steps.aml_run.outputs.model }}
+    #     path: SpatialSimOutputs
+
