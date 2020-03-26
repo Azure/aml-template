@@ -14,6 +14,11 @@ jobs:
         run: |
           if [ -z "${{ github.event.client_payload.slash_command.model_name }}"]; then echo "model_name is NULL"; exit 1; else echo "model_name is ${{ toJson(github.event.client_payload.slash_command.model_name) }}"; fi;
           if [ -z "${{ github.event.client_payload.slash_command.model_version }}"]; then echo "model_version is NULL"; exit 1; else echo "model_version is ${{ toJson(github.event.client_payload.slash_command.model_version) }}"; fi;
+          
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Check Out Repository
+        id: checkout_repository
+        uses: actions/checkout@v2
 
       # Connect or Create the Azure Machine Learning Workspace
       - name: Connect/Create Azure Machine Learning Workspace
