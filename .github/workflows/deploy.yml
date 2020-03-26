@@ -41,18 +41,24 @@ jobs:
             modelVersion: ${{ github.event.client_payload.slash_command.model_version }}
 
       # TODO - when tested, uncomment these
-      # # Deploy your model to dev (this is optional)
-      # - name: Dev Deploy
-      #   if: github.event.client_payload.slash_command.dev == 'true'
-      #   id: aml_dev_deploy
-      #   uses: Azure/aml-deploy@master
-      #   with:
-      #       azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+      # Deploy your model to dev (this is optional)
+      - name: Dev Deploy
+        if: github.event.client_payload.slash_command.dev == 'true'
+        id: aml_dev_deploy
+        uses: Azure/aml-deploy@master
+        with:
+            azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+            modelName:  ${{ github.event.client_payload.slash_command.model_name }}
+            modelVersion: ${{ github.event.client_payload.slash_command.model_version }}
+            parameters_file: "dev_aks.json"
 
-      # # Deploy your model to production
-      # - name: Prod Deploy
-      #   if: github.event.client_payload.slash_command.prod == 'true'
-      #   id: aml_prod_deploy
-      #   uses: Azure/aml-deploy@master
-      #   with:
-      #       azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+      # Deploy your model to production
+      - name: Prod Deploy
+        if: github.event.client_payload.slash_command.prod == 'true'
+        id: aml_prod_deploy
+        uses: Azure/aml-deploy@master
+        with:
+            azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+            modelName:  ${{ github.event.client_payload.slash_command.model_name }}
+            modelVersion: ${{ github.event.client_payload.slash_command.model_version }}
+            parameters_file: "prod_aks.json"
