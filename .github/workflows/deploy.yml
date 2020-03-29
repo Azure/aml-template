@@ -31,8 +31,7 @@ jobs:
           issue-number: ${{ github.event.client_payload.github.payload.issue.number }}
           body: |
             @${{ github.event.client_payload.github.actor }} Just submit a deploy request.
-            [Click here to see the deploy run output][1]
-            [1]: ${{ steps.vars.outputs.run-url }}
+            [Click here to see the deploy run output](${{ steps.vars.outputs.run-url }})
 
       # Connect or Create the Azure Machine Learning Workspace
       - name: Connect/Create Azure Machine Learning Workspace
