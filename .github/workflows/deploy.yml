@@ -20,6 +20,20 @@ jobs:
         id: checkout_repository
         uses: actions/checkout@v2
 
+      - name: Create URL to the run output
+        id: vars
+        run: echo ::set-output name=run-url::https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
+
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.client_payload.github.payload.issue.number }}
+          body: |
+            @${{ github.event.client_payload.github.actor }} Just submit a deploy request.
+            [Click here to see the deploy run output][1]
+            [1]: ${{ steps.vars.outputs.run-url }}
+
       # Connect or Create the Azure Machine Learning Workspace
       - name: Connect/Create Azure Machine Learning Workspace
         id: aml_workspace
@@ -27,7 +41,7 @@ jobs:
         with:
             azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # # Profile your model (this is optional)
+      # # Profile your model (TODO)
       # - name: Profile Model
       #   if: github.event.client_payload.slash_command.profile == 'true'
       #   id: aml_profile
@@ -45,7 +59,6 @@ jobs:
             model_name:  ${{ github.event.client_payload.slash_command.model_name }}
             model_version: ${{ github.event.client_payload.slash_command.model_version }}
 
-      # TODO - when tested, uncomment these
       # Deploy your model to dev (this is optional)
       - name: Dev Deploy
         if: github.event.client_payload.slash_command.dev == 'true'
@@ -67,3 +80,12 @@ jobs:
             model_name:  ${{ github.event.client_payload.slash_command.model_name }}
             model_version: ${{ github.event.client_payload.slash_command.model_version }}
             parameters_file: "prod_aks.json"
+
+      - name: comment PR
+        if: github.event.client_payload.slash_command.prod == 'true'
+        uses: unsplash/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          msg: "scoring-endpoint: ${{ steps.aml_prod_deploy.outputs.service_scoring_uri}} \n
+            swagger-uri: ${{ steps.aml_prod_deploy.outputs.service_swagger_uri}}"
