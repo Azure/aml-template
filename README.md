@@ -1,22 +1,6 @@
----
-page_type: readme
-languages:
-- python
-description: "Add 150 character max description"
-urlFragment: "update-this-to-unique-url-stub"
----
+# ML Ops with GitHub Actions and AML
 
-# Official Microsoft Sample
-
-<!-- 
-Guidelines on README format: https://review.docs.microsoft.com/help/onboard/admin/samples/concepts/readme-template?branch=master
-
-Guidance on onboarding samples to docs.microsoft.com/samples: https://review.docs.microsoft.com/help/onboard/admin/samples/process/onboarding?branch=master
-
-Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
--->
-
-This template can be used for easy setting up of an AML training pipeline.
+This template can be used for easily setting up an AML training pipeline. To get started with this template, create a new repo and select this template for the repo.
 
 ## Contents
 
