@@ -80,11 +80,11 @@ jobs:
             model_version: ${{ github.event.client_payload.slash_command.model_version }}
             parameters_file: "prod_aks.json"
 
-      - name: comment PR
-        if: github.event.client_payload.slash_command.prod == 'true'
-        uses: unsplash/comment-on-pr@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v1
         with:
-          msg: "scoring-endpoint: ${{ steps.aml_prod_deploy.outputs.service_scoring_uri}} \n
-            swagger-uri: ${{ steps.aml_prod_deploy.outputs.service_swagger_uri}}"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.client_payload.github.payload.issue.number }}
+          body: |
+            scoring-endpoint: ${{ steps.aml_prod_deploy.outputs.service_scoring_uri}}
+            swagger-uri: ${{ steps.aml_prod_deploy.outputs.service_swagger_uri}}
