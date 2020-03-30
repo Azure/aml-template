@@ -6,7 +6,7 @@
   <img src="docs/images/actions.png" alt="Azure Machine Learning + Actions" height="80"/>
 </p>
 
-This template can be used for easily setting up a machine learning project with automated training and deployment using [GitHub Actions](https://github.com/features/actions) and [Azure Machine Learning](https://docs.microsoft.com/en-us/azure/machine-learning/).
+This template shows the more extensive capabilities of using [GitHub Actions](https://github.com/features/actions) with [Azure Machine Learning](https://docs.microsoft.com/en-us/azure/machine-learning/) managing a machine learning project with automated training and deployment. For a more simplified version of this automated pipeline, see the [ml-template-azure](https://github.com/machine-learning-apps/ml-template-azure) repository. 
 
 ## Contents
 
@@ -27,7 +27,11 @@ This template can be used for easily setting up a machine learning project with 
 
 MLOps empowers data scientists and machine learning engineers to bring together their knowledge and skills to simplify the process of going from model development to release/deployment. ML Ops enables you to track, version, test, certify and reuse assets in every part of the machine learning lifecycle and provides orchestration services to streamline managing this lifecycle. This allows practitioners to automate the end to end machine Learning lifecycle to frequently update models, test new models, and continuously roll out new ML models alongside your other applications and services.
 
-This repository enables Data Scientists to focus on the training and deployment code of their machine learning project (`src` folder of this repository). Once new code is checked into the `src` folder of the master branch of this repository the GitHub workflow is triggered and open source Azure Machine Learning actions are used to automatically manage the training through to deployment phases.
+Since the deployment process with a machine learning model is not always an automated process and requires different checks during what would be the "build" process, we have two separate workflows that make up the end to end ML Ops workflow. These follow the common GitHub Pull Request process. 
+
+Below is a diagram showing the entirety of the workflow. The workflow is as follows. A user edits the model training code (`src/train.py`), opens a Pull Request with these changes, the Pull Request will contain the output of the training run for the reviewers to understand how the model changed. The user can then deploy this model directly from the PR with familiar slash commands. 
+
+<img src="/docs/images/ML Ops Workflow (1).png"/>
 
 ## Azure Machine Learning Actions
 
@@ -49,25 +53,69 @@ If you don’t have an Azure subscription, create a free account before you begi
 
 ## Getting Started
 
-To get started with the template simply create a repo based off this template to get started.
+To get started with the template you will need to first create a repo based off of this template.
 
-### Setting up the required secrets
+### Configuring Azure Credentials
 
-In order to provide actions with the correct credentials for managing AML resources
-1. Setup the Azure CLI tool following the [instructions](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) from Azure.
-2. Next, open the secrets tab in the settings page of your repository. Add a new secret called **AZURE_CREDENTIALS** and paste the output of `az ad sp create-for-rbac --name <your-sp-name> --role contributor --scopes /subscriptions/<your-subscriptionId>/resourceGroups/<your-rg> --sdk-auth` as the value of secret variable. The JSON should include the following keys: 'tenantId', 'clientId', 'clientSecret' and 'subscriptionId'.
+Install the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) and execute the following command to generate the credentials:
 
-### Modify the code
+```sh
+# Replace {service-principal-name}, {subscription-id} and {resource-group} with your Azure subscription id and resource group and any name
+az ad sp create-for-rbac --name {service-principal-name} \
+                         --role contributor \
+                         --scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group} \
+                         --sdk-auth
+```
+
+This will generate the following JSON output:
+
+```sh
+{
+  "clientId": "<GUID>",
+  "clientSecret": "<GUID>",
+  "subscriptionId": "<GUID>",
+  "tenantId": "<GUID>",
+  (...)
+}
+```
+
+Add the JSON output as [a secret](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#creating-encrypted-secrets) with the name `AZURE_CREDENTIALS` in the GitHub repository.
+
+### Modify the Code
 
 You will need to modify the code in the <a href="/src">`src` folder</a> with your python code that will train your model. Where required, modify the environment yaml so that the training and deployment environments will have the correct packages for your training and deployment.
 
-### Push your changes to master
+### Training your Model
 
-Upon pushing the changes to master, actions will kick off your deployment run. Check the actions tab to view if your actions have successfully run. 
+In order to train your model, open a PR with your changes. This will trigger the `train.yml` workflow, when the training is complete, the metrics from your run will be written back to the PR. 
 
-### Viewing your AML resources
+```
+outputs:
+  run_metrics - markdown table of metrics
+  model_id - <model name>:<model version>
+ ```
 
-The log outputs of your action will provide URLs for you to view the resources that have been created in AML.
+### Deploying your model
+
+Slash commands are used to deploy your model in the pull request comments. In the pull request that you opened these commands can be used to run tests of your model as well as deploy the model to dev or prod infrastructure.
+
+deploy slash command:
+```
+/deploy model_name=<model name> model_version=<model version> test=<true or false> dev=<true or false> prod=<true or false>
+```
+
+#### deploy inputs
+
+| Argument   | Required | Allowed Values   | Default    | Description |
+| -----------| -------- | ---------------- | ---------- | ----------- |
+| model_name | yes      | string           |            | model name written to pr as `<model name>:<model id>` |
+| model_id   | yes      | string           |            | model version written to pr as `<model name>:<model id>` |
+| test       | no | boolean: true or false | false      | whether to test the model prior to deployment using Azure Container Instances |
+| dev       | no | boolean: true or false  | false      | dev environment deployment |
+| prod      | no | boolean: true or false  | false      | prod environment deployment |
+
+Upon commenting in the PR, actions will kick off your deployment run and the run output information will be written back as a comment to the PR.
+
 
 ## Contributing
 
