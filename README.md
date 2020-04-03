@@ -31,7 +31,7 @@ Since the deployment process with a machine learning model is not always an auto
 
 Below is a diagram showing the entirety of the workflow. The workflow is as follows. A user edits the model training code (`src/train.py`), opens a Pull Request with these changes, the Pull Request will contain the output of the training run for the reviewers to understand how the model changed. The user can then deploy this model directly from the PR with familiar slash commands. 
 
-<img src="/docs/images/ML Ops Workflow (1).png"/>
+<img src="/docs/images/ML Ops Workflow (2).png"/>
 
 ## Azure Machine Learning Actions
 
