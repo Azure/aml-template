@@ -12,7 +12,7 @@ This template shows the more extensive capabilities of using [GitHub Actions](ht
 
 | File/folder       | Description                                |
 |-------------------|--------------------------------------------|
-| `src`             | Sample source code.                        |
+| `code`             | Sample source code.                        |
 | `.github/workflows`| Workflow for automated ML training and deployment  |
 | `.ml/azure`       | configuration files for azure              |
 | `CONTRIBUTING.md` | Guidelines for contributing to the templates. |
