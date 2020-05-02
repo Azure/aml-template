@@ -36,7 +36,7 @@ jobs:
       # Connect or Create the Azure Machine Learning Workspace
       - name: Connect/Create Azure Machine Learning Workspace
         id: aml_workspace
-        uses: Azure/aml-workspace@master
+        uses: Azure/aml-workspace@v1
         with:
             azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -52,7 +52,7 @@ jobs:
       - name: Test Model
         if: github.event.client_payload.slash_command.test == 'true'
         id: aml_test
-        uses: Azure/aml-deploy@master
+        uses: Azure/aml-deploy@v1
         with:
             azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
             model_name:  ${{ github.event.client_payload.slash_command.model_name }}
@@ -62,7 +62,7 @@ jobs:
       - name: Dev Deploy
         if: github.event.client_payload.slash_command.dev == 'true'
         id: aml_dev_deploy
-        uses: Azure/aml-deploy@master
+        uses: Azure/aml-deploy@v1
         with:
             azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
             model_name:  ${{ github.event.client_payload.slash_command.model_name }}
@@ -73,7 +73,7 @@ jobs:
       - name: Prod Deploy
         if: github.event.client_payload.slash_command.prod == 'true'
         id: aml_prod_deploy
-        uses: Azure/aml-deploy@master
+        uses: Azure/aml-deploy@v1
         with:
             azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
             model_name:  ${{ github.event.client_payload.slash_command.model_name }}
